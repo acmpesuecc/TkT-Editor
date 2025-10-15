@@ -1,6 +1,6 @@
 # TkT~Ed
 
-## Portable text editor made with python and tkinte.
+## Portable text editor made with python and tkinter.
 
 ---------------
 
