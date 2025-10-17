@@ -133,13 +133,13 @@ def main():
             menu.add_command(label=display, command=lambda i=item: paste_text(item=i))
         
         # Show menu below the Text widget cursor
-        x = T.winfo_rootx() + 50  # adjust offset if needed
-        y = T.winfo_rooty() + 30
+        x = clipboard_btn.winfo_rootx()
+        y = clipboard_btn.winfo_rooty() + clipboard_btn.winfo_height()  # below the button
         menu.post(x, y)
 
     # Bind F8 to open the clipboard menu
     root.bind("<F8>", open_clipboard_menu)
-    
+
     T.bind("<Control-c>", copy_text)
     T.bind("<Control-x>", cut_text)
     T.bind("<Control-v>", paste_text)
