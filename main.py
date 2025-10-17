@@ -121,10 +121,29 @@ def main():
     T.focus_set()
     register_widget('text_widget',T)
 
+    def open_clipboard_menu(event=None):
+        """Open a dropdown menu for clipboard items (keyboard navigable)."""
+        if not local_clipboard:
+            messagebox.showinfo("Clipboard", "Clipboard is empty!")
+            return
+
+        menu = Menu(root, tearoff=0)
+        for item in local_clipboard:
+            display = item.replace("\n", " ")
+            menu.add_command(label=display, command=lambda i=item: paste_text(item=i))
+        
+        # Show menu below the Text widget cursor
+        x = T.winfo_rootx() + 50  # adjust offset if needed
+        y = T.winfo_rooty() + 30
+        menu.post(x, y)
+
+    # Bind F8 to open the clipboard menu
+    root.bind("<F8>", open_clipboard_menu)
+    
     T.bind("<Control-c>", copy_text)
     T.bind("<Control-x>", cut_text)
     T.bind("<Control-v>", paste_text)
-    
+
     Font_tuple=(font_name,font_size,"normal")
     T.configure(font=Font_tuple,foreground=color_hex_fg_code,background=color_hex_bg_code)
     
