@@ -1,5 +1,9 @@
 # TkT~Ed
+
+## Portable text editor made with python and tkinter.
+
 ---------------
+
 ### Usage :
 
 ```bash
@@ -21,7 +25,7 @@ python main.py
 
 ------------------
 
-### ToDO :
+### ToDo     :
 - [x] Find and Replace
 - [x] Text emphasis
 - [ ] clipboard feature 
