@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import *
 from tkinter.filedialog import asksaveasfilename,askopenfilename
 from tkinter import colorchooser,messagebox
@@ -10,6 +11,7 @@ from customize_functions import *
 from help_functions import *
 from print_function import *
 
+
 #welcome to TkT
 root=Tk()
 root.title("『Tk』Ed")
@@ -17,12 +19,23 @@ root.geometry("1280x720")
 img=PhotoImage(file='assets/pen1.png')
 root.iconphoto(False,img)
 
+
+def wordcount(event):
+    char =0
+    words = T.get("1.0", END)
+    words = words.split()
+    for word in words:
+        for letter in word:
+            char +=1
+    wordLable.config(text=f"Words: {len(words)}| Character Count: {char} ")
+
 def New_page(event=None):
     print("Opening a new file")
     T.delete("1.0",END)
     notification("New File",700)
     T.after(1000,main)
     # main()
+
 
 def spell_check(event=None):
     spell = SpellChecker()
@@ -37,15 +50,18 @@ def spell_check(event=None):
     
     
 def main():
-    global T
-    
+    global T , wordLable
+    wordLable = Label(root, text="Words: 0 | Characters: 0", anchor='w')
+    wordLable.grid(row=2, column=0, columnspan=2, sticky='we')
+
     frame=Frame(root)
     frame.grid(row=0, column=0, sticky='e')
-    
+
     menubar=Menu(root) 
     global Options_Menu
     Options_Menu=Menu(menubar,tearoff=0) 
     # menubar.bind('<Alt-1>', Options_Menu)
+
 
     menubar.add_cascade(label="File", menu=Options_Menu)
     # root.bind('<Alt-1>')
@@ -109,6 +125,7 @@ def main():
     menubar.add_cascade(label="Print",menu=Print_menu)
     Print_menu.add_command(label="Generate PDF",command=convert_to_pdf,accelerator="Ctrl+p")
     root.bind("<Control-p>",convert_to_pdf)
+
     
     T=Text(root,height=700,width=700,undo=True,wrap=NONE)
     T.grid(row=0, column=0, sticky='nsew')
@@ -129,7 +146,7 @@ def main():
     scroll_bar_h=Scrollbar(root,orient=HORIZONTAL,command=T.xview)
     scroll_bar_h.grid(row=1,column=0,sticky='ew')
     T.config(xscrollcommand=scroll_bar_h.set)
-
+    T.bind('<KeyRelease>', wordcount)
     if len(sys.argv) == 2 : 
         Fetch_file_path()
     root.mainloop()
