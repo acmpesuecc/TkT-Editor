@@ -9,6 +9,7 @@ from edit_functions import *
 from customize_functions import *
 from help_functions import *
 from print_function import *
+from clipboard_functions import *
 
 #welcome to TkT
 root=Tk()
@@ -34,8 +35,7 @@ def spell_check(event=None):
     corrected_string = ' '.join(correction)
     T.delete('1.0',END)
     T.insert(END, corrected_string)
-    
-    
+
 def main():
     global T
     
@@ -110,6 +110,15 @@ def main():
     Print_menu.add_command(label="Generate PDF",command=convert_to_pdf,accelerator="Ctrl+p")
     root.bind("<Control-p>",convert_to_pdf)
     
+    Clipboard_Menu=Menu(menubar,tearoff=0)
+    menubar.add_cascade(label="ClipBoard",menu=Clipboard_Menu)
+    Clipboard_Menu.add_command(label="Copy", command=copy_text, accelerator="Ctrl+c")
+    root.bind("<Control-c>", copy_text)
+    Clipboard_Menu.add_command(label="Cut", command=cut_text, accelerator="Ctrl+x")
+    root.bind("<Control-x>", cut_text)
+    Clipboard_Menu.add_command(label="Paste", command=paste_text, accelerator="Ctrl+v")
+    root.bind("<Control-v>", paste_text)
+
     T=Text(root,height=700,width=700,undo=True,wrap=NONE)
     T.grid(row=0, column=0, sticky='nsew')
     T.focus_set()
@@ -129,6 +138,21 @@ def main():
     scroll_bar_h=Scrollbar(root,orient=HORIZONTAL,command=T.xview)
     scroll_bar_h.grid(row=1,column=0,sticky='ew')
     T.config(xscrollcommand=scroll_bar_h.set)
+
+# -------------------- Clipboard Button --------------------
+    def show_clipboard_menu(event=None):
+        if not local_clipboard:
+            messagebox.showinfo("Clipboard", "Clipboard is empty!")
+            return
+
+        menu = Menu(root, tearoff=0)
+        for item in local_clipboard:
+            display = item.replace("\n", " ")
+            menu.add_command(label=display, command=lambda i=item: paste_text(item=i))
+        menu.tk_popup(clipboard_btn.winfo_rootx(), clipboard_btn.winfo_rooty() + clipboard_btn.winfo_height())
+
+    clipboard_btn = Button(root, text="📋", font=("Arial", 12), command=show_clipboard_menu)
+    clipboard_btn.place(relx=0.98, rely=0, anchor="ne")  # Top-right corner
 
     if len(sys.argv) == 2 : 
         Fetch_file_path()
