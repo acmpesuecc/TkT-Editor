@@ -65,13 +65,13 @@ def main():
     Options_Menu.add_command(label="New",command=New_page,accelerator="Ctrl+n")
     root.bind('<Control-n>', New_page)
         
-    Options_Menu.add_command(label="Open",command=Fetch_file_path,accelerator="Ctrl+o")
+    Options_Menu.add_command(label="Open",command=lambda: Fetch_file_path(root),accelerator="Ctrl+o")
     root.bind('<Control-o>', lambda event: Fetch_file_path(root))
     
-    Options_Menu.add_command(label="Save",command=Save,accelerator="Ctrl+s")
-    root.bind('<Control-s>', lambda event: Save(root))
+    Options_Menu.add_command(label="Save",command= lambda: Save(root),accelerator="Ctrl+s")
+    root.bind('<Control-s>', lambda event: Save)
     
-    Options_Menu.add_command(label="SaveAs",command=saveAs,accelerator="Ctrl+Shift+S")
+    Options_Menu.add_command(label="SaveAs",command=lambda: saveAs(root),accelerator="Ctrl+Shift+S")
     root.bind('<Control-Shift-S>', lambda event : saveAs(root))
     
     Options_Menu.add_command(label="SpellCheck", command=spell_check,accelerator="F7")

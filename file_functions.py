@@ -22,7 +22,7 @@ def update_title(root):
 
 
 def Fetch_file_path(root, event=None):
-    T=get_widget('text_widget')
+    T=get_widget('text_widget') 
     def Open_file(file_path):
         if file_path:
             with open(file_path, "r") as fileobj:
@@ -45,6 +45,7 @@ def Fetch_file_path(root, event=None):
         Open_file(file_path)
 
 def Save(root, event=None):
+    #print("a")
     global file_path
     T=get_widget('text_widget')
     # file_path = askopenfilename()
