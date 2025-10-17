@@ -2,6 +2,7 @@ from tkinter import *
 from widget_registry import get_widget
 from tkinter.filedialog import asksaveasfilename,askopenfilename
 import sys
+import os
 
 file_path=None
 save_location=None
@@ -11,7 +12,16 @@ color_hex_bg_code='#FFFFED' #default bg color
 color_hex_fg_code='black' #default fg color
 rep_word=None
 
-def Fetch_file_path(event=None):
+def update_title(root):
+    global file_path
+    if file_path:
+        filename = os.path.basename(file_path)
+        root.title(f"『Tk』Ed - {filename}")
+    else:
+        root.title("『Tk』Ed - Untitled")
+
+
+def Fetch_file_path(root, event=None):
     T=get_widget('text_widget')
     def Open_file(file_path):
         if file_path:
@@ -20,7 +30,9 @@ def Fetch_file_path(event=None):
                 print("file read succesfully")
                 T.delete("1.0",END)
                 T.insert("1.0",content)
+                update_title(root)
                 notification("Opened file successfully",700)
+                
 
     global file_path
     if(len(sys.argv) == 2):
@@ -32,21 +44,23 @@ def Fetch_file_path(event=None):
         file_path = askopenfilename()
         Open_file(file_path)
 
-def Save(event=None):
+def Save(root, event=None):
     global file_path
     T=get_widget('text_widget')
     # file_path = askopenfilename()
     print("Saving the file")
     if not file_path:
-        saveAs()
+        saveAs(root)
     else:
         with open(file_path,"w") as file1:
             t = T.get("1.0",END)
             file1.write(t)
         print(f"File saved to location: {file_path}")
+        update_title(root)
         notification("File saved successfully",700)
+        
 
-def saveAs(event=None):
+def saveAs(root, event=None):
     T=get_widget('text_widget')
     t=T.get("1.0","end-1c")
     global save_location
@@ -58,7 +72,9 @@ def saveAs(event=None):
             file1.write(t)
             print(f"File saved to location: {save_location}")
         file_path=save_location
+        update_title(root)
         notification("File saved successfully",700)
+        
     else:
         print("enter save location")
 
@@ -81,7 +97,7 @@ def notification(message,disp_time):
     root_destroy.geometry(f'{width}x{height}+{x}+{y}')
 
     root_destroy.after(disp_time,root_destroy.destroy)
-    root_destroy.mainloop()
+    #root_destroy.mainloop()
 
 def close_window(window):
     window.destroy()

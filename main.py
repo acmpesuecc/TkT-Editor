@@ -12,17 +12,29 @@ from print_function import *
 
 #welcome to TkT
 root=Tk()
-root.title("『Tk』Ed")
+root.title("『Tk』Ed - Untitled")
 root.geometry("1280x720")
 img=PhotoImage(file='assets/code.png')
 root.iconphoto(True,img)
 
+current_file = None
+
 def New_page(event=None):
     print("Opening a new file")
+    global current_file
+    current_file = None
     T.delete("1.0",END)
-    notification("New File",700)
+    #notification("New File",700)
     T.after(1000,main)
+    update_title(root)
+    notification("New File",700)
     # main()
+
+'''def update_title(event=None):
+    if current_file:
+        root.title(f"『Tk』Ed - {current_file}")
+    else:
+        root.title("『Tk』Ed - Untitled") ->> moved to file_functions.py'''
 
 def spell_check(event=None):
     spell = SpellChecker()
@@ -54,13 +66,13 @@ def main():
     root.bind('<Control-n>', New_page)
         
     Options_Menu.add_command(label="Open",command=Fetch_file_path,accelerator="Ctrl+o")
-    root.bind('<Control-o>', Fetch_file_path)
+    root.bind('<Control-o>', lambda event: Fetch_file_path(root))
     
     Options_Menu.add_command(label="Save",command=Save,accelerator="Ctrl+s")
-    root.bind('<Control-s>', Save)
+    root.bind('<Control-s>', lambda event: Save(root))
     
     Options_Menu.add_command(label="SaveAs",command=saveAs,accelerator="Ctrl+Shift+S")
-    root.bind('<Control-Shift-S>', saveAs)
+    root.bind('<Control-Shift-S>', lambda event : saveAs(root))
     
     Options_Menu.add_command(label="SpellCheck", command=spell_check,accelerator="F7")
     root.bind('<F7>',spell_check)
