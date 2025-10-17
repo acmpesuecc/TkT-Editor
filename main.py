@@ -113,17 +113,18 @@ def main():
     Clipboard_Menu=Menu(menubar,tearoff=0)
     menubar.add_cascade(label="ClipBoard",menu=Clipboard_Menu)
     Clipboard_Menu.add_command(label="Copy", command=copy_text, accelerator="Ctrl+c")
-    root.bind("<Control-c>", copy_text)
     Clipboard_Menu.add_command(label="Cut", command=cut_text, accelerator="Ctrl+x")
-    root.bind("<Control-x>", cut_text)
     Clipboard_Menu.add_command(label="Paste", command=paste_text, accelerator="Ctrl+v")
-    root.bind("<Control-v>", paste_text)
 
     T=Text(root,height=700,width=700,undo=True,wrap=NONE)
     T.grid(row=0, column=0, sticky='nsew')
     T.focus_set()
     register_widget('text_widget',T)
 
+    T.bind("<Control-c>", copy_text)
+    T.bind("<Control-x>", cut_text)
+    T.bind("<Control-v>", paste_text)
+    
     Font_tuple=(font_name,font_size,"normal")
     T.configure(font=Font_tuple,foreground=color_hex_fg_code,background=color_hex_bg_code)
     

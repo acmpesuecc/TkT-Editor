@@ -5,29 +5,36 @@ from widget_registry import get_widget
 local_clipboard = []
 
 def copy_text(event=None):
-    """Copy selected text into local clipboard."""
+    """Copy selected text into local clipboard without duplicate at the top."""
     T = get_widget('text_widget')
     try:
-        selected = T.get("sel.first", "sel.last")
-        if selected.strip():
-            local_clipboard.insert(0, selected)
+        selected = T.get("sel.first", "sel.last").strip()
+        if selected:
+            if not local_clipboard or local_clipboard[0] != selected:
+                local_clipboard.insert(0, selected)
+            # Keep only last 10 items
             if len(local_clipboard) > 10:
                 local_clipboard.pop()
     except TclError:
         pass  # nothing selected
+    return "break"
 
 def cut_text(event=None):
-    """Cut selected text into local clipboard."""
+    """Cut selected text into local clipboard without duplicate at the top."""
     T = get_widget('text_widget')
     try:
-        selected = T.get("sel.first", "sel.last")
-        if selected.strip():
-            local_clipboard.insert(0, selected)
+        selected = T.get("sel.first", "sel.last").strip()
+        if selected:
+            if not local_clipboard or local_clipboard[0] != selected:
+                local_clipboard.insert(0, selected)
+            # Keep only last 10 items
             if len(local_clipboard) > 10:
                 local_clipboard.pop()
             T.delete("sel.first", "sel.last")
     except TclError:
-        pass
+        pass  # nothing selected
+    return "break"
+
 
 def paste_text(event=None, item=None):
     """Paste most recent or a chosen clipboard item."""
@@ -37,6 +44,7 @@ def paste_text(event=None, item=None):
             T.insert("insert", local_clipboard[0])
     else:
         T.insert("insert", item)
+    return "break"
 
 # def show_clipboard_popup(root):
 #     """Open a scrollable popup window showing all clipboard items for selection."""
